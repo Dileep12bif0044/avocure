@@ -4,7 +4,7 @@ class UserController < ApplicationController
 
   def admin_registration
     registration_create_local()
-    create_local(@emp.id, @emp.name, 'add_new_members')
+    create_local(@emp.email, @emp.id, @emp.name, 'add_new_members')
     render 'create'
   end
 
@@ -13,13 +13,13 @@ class UserController < ApplicationController
       registration_create_local()
       params[:fdata].each do |data|
         if data['add_new_members']
-          create_local(@emp.id, @emp.name, data['add_new_members'])
+          create_local(@emp.email, @emp.id, @emp.name, data['add_new_members'])
         elsif data['edit_hospital_profile']
-          create_local(@emp.id, @emp.name, data['edit_hospital_profile'])
+          create_local(@emp.email, @emp.id, @emp.name, data['edit_hospital_profile'])
         elsif data['manage_medical_profile']
-          create_local(@emp.id, @emp.name, data['manage_medical_profile'])
+          create_local(@emp.email, @emp.id, @emp.name, data['manage_medical_profile'])
         else data['respond_to_patient_requests']
-          create_local(@emp.id, @emp.name, data['respond_to_patient_requests'])
+          create_local(@emp.email, @emp.id, @emp.name, data['respond_to_patient_requests'])
         end
       end
       @success = "Invitation has been sent to user"
@@ -45,7 +45,7 @@ class UserController < ApplicationController
     return @emp
   end
 
-  def create_local(emp_id, emp_name, argData)
+  def create_local(email_id, emp_id, emp_name, argData)
     @emp_type = EmployeeType.new
     @emp_type.work_type = argData
     @emp_type.save
@@ -54,9 +54,10 @@ class UserController < ApplicationController
     @emp_emp_type.employee_type_id = @emp_type.id
     @emp_emp_type.save
     #this is for send mail
+    # chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
     # token_length = 20;
     # token_length.times { token << chars[rand(chars.size)] } 
-    # UserMailer.signup_confirmation(emp_name, emp_id).deliver
+    # UserMailer.signup_confirmation(emp_name, email_id).deliver
   end
 
   def login
