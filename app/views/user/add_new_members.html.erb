@@ -1,0 +1,72 @@
+<html>
+<head>
+	<title>addmin-add members</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="jumbotron">
+		<div class="row">
+			<div class="col-md-6">
+				<h1>Welcome Admin !</h1>
+				<h4><a href="http://localhost:3000/user/set-one-password">Set Employees Password</a></h4>
+				<h4><a href="http://localhost:3000/user/admin-add-members">View Employees Profile</a></h4>
+				<h4><a href="http://localhost:3000/user/admin-add-members">Block Employee</a></h4>
+				<% if @array %>
+					<% @array.each do |x| %>
+						<% if x=='respond_to_patient_requests' %>
+							<h4><a href="http://localhost:3000/user/respond-to-patient-requests">respond_to_patient_requests</a></h4>
+						<% elsif x=='manage_medical_profile' %>
+							<h4><a href="http://localhost:3000/user/manage-medical-profile">Manage Medical Profile</a></h4>
+						<% elsif x=='edit_hospital_profile' %>
+							<h4><a href="http://localhost:3000/user/edit-hospital-profile">Edit-Hospital-Profile</a></h4>
+						<% end %>
+					<% end %>
+				<% end %>
+			</div>
+			<div class="col-md-6">
+				<div class="row" style="position: relative; border: 0.5px solid lightgrey;">
+					<h3 class="text-left">Add Members & Assign permissions</h3>
+					<b>Name & emails</b>
+					<div class="col-md-12">
+						<form charset='UTF-8' method="post" action="/user/create">
+							<input type="hidden" name="authenticity_token" value="j/DcoJ2VZvr7vdf8CHKsvjdlDbmiizaOb5B8DMALg6s=" >
+							Name:<input type="text" name="name" class="form-control" required><br>
+							Email:<input type="email" name="email" class="form-control" required><br>
+							<input type="checkbox" name="fdata[respond_to_patient_requests]" id="respond_to_patient_requests" value="0">respond to patient requests
+							<br><input type="checkbox" name="fdata[edit_hospital_profile]" id="edit_hospital_profile" value="0">edit hospital profile</input><br>
+							<input type="checkbox" name="fdata[manage_medical_profile]" id="manage_medical_profile" value="0">manage medical profile</input><br>
+							<input type="checkbox" name="fdata[add_new_members]" id="add_new_members" value="0">add new members</input><br>
+							<button type="submit" class="button btn btn-danger text-center">Add to team</button>
+						</form>
+					</div>
+					<% if @permissions %>
+					 		<p style="color: red"><%= @permissions %></p>
+					<%	elsif @success %>
+					 		<p style="color: green"><%= @success %></p>
+					<% end %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function checkBox() {
+	$("input:checkbox").on("click", function(){
+		if ($(this).is(":checked")){
+		  var data = $(this).val('1');
+		}
+		else {
+			var data = $(this).val('0');
+		}
+	});
+}
+</script>
+<script type="text/javascript">checkBox()</script>
+</body>
+</html>

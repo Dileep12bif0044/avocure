@@ -1,0 +1,12 @@
+<h1>Respond to patient requests</h1>
+<% if @array %>
+	<% @array.each do |x| %>
+		<% if x=='manage_medical_profile' %>
+			<h4><a href="http://localhost:3000/user/manage-medical-profile">Manage Medical Profile</a></h4>
+		<% elsif x=='edit_hospital_profile' %>
+			<h4><a href="http://localhost:3000/user/edit-hospital-profile">Edit-Hospital-Profile</a></h4>
+		<% elsif x=='add_new_members' %>
+			<h4><a href="http://localhost:3000/user/add-new-members">Add New Members</a></h4>
+		<% end %>
+	<% end %>
+<% end %>

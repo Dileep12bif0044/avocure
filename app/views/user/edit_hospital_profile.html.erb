@@ -1,0 +1,29 @@
+<html>
+<head>
+	<title>Edit Hospital Profile</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<h1>Edit Hospital Profile</h1>
+			<% if @array %>
+				<% @array.each do |x| %>
+					<% if x=='respond_to_patient_requests' %>
+						<h4><a href="http://localhost:3000/user/respond-to-patient-requests">respond_to_patient_requests</a></h4>
+					<% elsif x=='manage_medical_profile' %>
+						<h4><a href="http://localhost:3000/user/manage-medical-profile">Manage Medical Profile</a></h4>
+					<% elsif x=='add_new_members' %>
+						<h4><a href="http://localhost:3000/user/add-new-members">Add New Members</a></h4>
+					<% end %>
+				<% end %>
+			<% end %>
+		</div>
+	</div>
+</body>
+</html>
+

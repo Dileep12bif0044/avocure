@@ -1,0 +1,27 @@
+<html>
+<head>
+	<title>AdminRegistration</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<h2 class="text-center">AdminRegistration</h2>
+		<b>New Admin register here</b>
+		<form charset='UTF-8' method="post" action="/user/admin-registration">
+			<div >
+				<input type="hidden" name="authenticity_token" value="j/DcoJ2VZvr7vdf8CHKsvjdlDbmiizaOb5B8DMALg6s=" >
+				Name:<input type="text" name="name" class="form-control">
+				Email:<input type="email" name="email" class="form-control">
+				<button type="submit" class="button btn btn-success" >Submit</button>
+			</div>
+		</form>
+		<a href="/user/login">
+			<b>Exixting User! Click here</b>
+		</a>
+	</div>
+</body>
+</html>

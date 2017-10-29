@@ -27,7 +27,22 @@ Rails.application.configure do
   end
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
+
+  # # mailer method
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.default_url_options = {:host=>'localhost:3000'}
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.default charset: 'utf-8'
+  config.action_mailer.smtp_settings = {
+    :port                 => 587,
+    :user_name => 'Dileep_Kumar',
+    :password => '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',
+    :domain => 'yourdomain.com',
+    :address => 'smtp.sendgrid.net',
+    :authentication       => "plain",
+    :enable_starttls_auto => true
+    }
 
   config.action_mailer.perform_caching = false
 
@@ -43,7 +58,6 @@ Rails.application.configure do
   config.assets.debug = true
 
   # Suppress logger output for asset requests.
-  config.assets.quiet = true
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

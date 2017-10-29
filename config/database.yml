@@ -20,6 +20,8 @@ default: &default
 development:
   <<: *default
   database: avocure_development
+  username: root
+  password: root
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -52,5 +54,3 @@ production:
   database: avocure_production
   username: root
   password: root
-  # username: avocure
-  # password: <%= ENV['AVOCURE_DATABASE_PASSWORD'] %>
