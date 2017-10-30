@@ -4,55 +4,58 @@ class UserController < ApplicationController
 
   def admin_registration
     registration_create_local()
-    create_local(@emp.email, @emp.id, @emp.name, 'add_new_members')
-    render 'create'
+    if !@emp.errors.any? && !@exist
+      create_local(@emp.email, @emp.id, @emp.name, 'add_new_members')
+    end
+    render 'registration'
   end
 
   def create
     if params[:fdata]
       registration_create_local()
-      params[:fdata].each do |data|
-        if data['add_new_members']
-          create_local(@emp.email, @emp.id, @emp.name, data['add_new_members'])
-        elsif data['edit_hospital_profile']
-          create_local(@emp.email, @emp.id, @emp.name, data['edit_hospital_profile'])
-        elsif data['manage_medical_profile']
-          create_local(@emp.email, @emp.id, @emp.name, data['manage_medical_profile'])
-        else data['respond_to_patient_requests']
-          create_local(@emp.email, @emp.id, @emp.name, data['respond_to_patient_requests'])
+      if !@emp.errors.any?
+        params[:fdata].each do |data|
+          if data['add_new_members']
+            create_local(@emp.email, @emp.id, @emp.name, data['add_new_members'])
+          elsif data['edit_hospital_profile']
+            create_local(@emp.email, @emp.id, @emp.name, data['edit_hospital_profile'])
+          elsif data['manage_medical_profile']
+            create_local(@emp.email, @emp.id, @emp.name, data['manage_medical_profile'])
+          else data['respond_to_patient_requests']
+            create_local(@emp.email, @emp.id, @emp.name, data['respond_to_patient_requests'])
+          end
         end
       end
-      @success = "Invitation has been sent to user"
     else
-      @permissions = 'Give a permission'
+      @permissions = 'Select a check box for permission'
     end
     render 'add_new_members'
   end
 
   def registration_create_local()
-    pass_length = 6;
-    chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
-    token = ''
-    password = ''
-    pass_length.times { password << chars[rand(chars.size)] }
-
-    @email_exists = Employee.where(:email=>params[:email]).first
-    @emp = Employee.new
-    @emp.name = params[:name]
-    @emp.email = params[:email]
-    @emp.password = password
-    @emp.save
-    return @emp
+    @emp = Employee.where(:email=>params[:email]).first
+    if !@emp
+      pass_length = 6;
+      chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
+      token = ''
+      password = ''
+      pass_length.times { password << chars[rand(chars.size)] }
+      @emp = Employee.create(:name=>params[:name], :email=>params[:email], :password=>password)
+    else
+      @exist = 1
+    end
+    return @emp, @exist
   end
 
-  def create_local(email_id, emp_id, emp_name, argData)
+  def create_local(email_id, emp_id, emp_name, work_type)
     @emp_type = EmployeeType.new
-    @emp_type.work_type = argData
+    @emp_type.work_type = work_type
     @emp_type.save
     @emp_emp_type = EmployeeEmployeeType.new
     @emp_emp_type.employee_id = emp_id
     @emp_emp_type.employee_type_id = @emp_type.id
     @emp_emp_type.save
+
     #this is for send mail
     # chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
     # token_length = 20;
@@ -122,7 +125,7 @@ class UserController < ApplicationController
 end
 
 #this is for storing auth_token for admin
-# if argData == 'add_new_members'
+# if work_type == 'add_new_members'
 #   pass_length = 20;
 #   chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
 #   token = ''

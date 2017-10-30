@@ -46,8 +46,17 @@
 					</div>
 					<% if @permissions %>
 					 		<p style="color: red"><%= @permissions %></p>
-					<%	elsif @success %>
-					 		<p style="color: green"><%= @success %></p>
+					<% elsif @emp %>
+							<% if@emp.errors.any? %>
+								<h2>Errors:</h2>
+								<ul>
+									<% @emp.errors.full_messages.each do |x| %>
+										<p style="color: red"><%= x %></p>
+									<% end %>
+								</ul>
+							<% end %>
+					 <% else %>
+					 		<p style="color: green">Invitation has been sent to user</p>
 					<% end %>
 					</div>
 				</div>

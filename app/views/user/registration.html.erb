@@ -22,6 +22,20 @@
 		<a href="/user/login">
 			<b>Exixting User! Click here</b>
 		</a>
+		<% if @emp %>
+			<% if@emp.errors.any? %>
+				<h2>Errors:</h2>
+				<ul>
+					<% @emp.errors.full_messages.each do |x| %>
+						<p style="color: red"><%= x %></p>
+					<% end %>
+				</ul>
+			<% elsif @exist %>
+				<h4 style="color: grey">Email or this account is already exist in DB</h4>
+			<% else %>
+				<h4 style="color: green">Your admin has been registered successfuly</h4>
+			<% end %>
+		<% end %>
 	</div>
 </body>
 </html>

@@ -15,24 +15,24 @@ ActiveRecord::Schema.define(version: 20171028032803) do
   create_table "employee_employee_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "employee_type_id"
     t.bigint "employee_id"
-    t.datetime "created_at", default: "2017-10-29 00:17:01", null: false
-    t.datetime "updated_at", default: "2017-10-29 00:17:01", null: false
+    t.datetime "created_at", default: "2017-10-30 12:24:46", null: false
+    t.datetime "updated_at", default: "2017-10-30 12:24:46", null: false
     t.index ["employee_id"], name: "index_employee_employee_types_on_employee_id"
     t.index ["employee_type_id"], name: "index_employee_employee_types_on_employee_type_id"
   end
 
   create_table "employee_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "work_type", null: false
-    t.datetime "created_at", default: "2017-10-29 00:17:00", null: false
-    t.datetime "updated_at", default: "2017-10-29 00:17:00", null: false
+    t.datetime "created_at", default: "2017-10-30 12:24:45", null: false
+    t.datetime "updated_at", default: "2017-10-30 12:24:45", null: false
   end
 
   create_table "employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "email", null: false
     t.string "name"
     t.string "password", null: false
-    t.datetime "created_at", default: "2017-10-29 00:17:00", null: false
-    t.datetime "updated_at", default: "2017-10-29 00:17:00", null: false
+    t.datetime "created_at", default: "2017-10-30 12:24:46", null: false
+    t.datetime "updated_at", default: "2017-10-30 12:24:46", null: false
   end
 
   add_foreign_key "employee_employee_types", "employee_types"
