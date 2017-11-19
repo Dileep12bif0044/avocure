@@ -13,17 +13,15 @@
 		<div class="row">
 			<div class="col-md-6">
 				<h1>Welcome Admin !</h1>
-				<h4><a href="http://localhost:3000/user/set-one-password">Set Employees Password</a></h4>
-				<h4><a href="http://localhost:3000/user/admin-add-members">View Employees Profile</a></h4>
-				<h4><a href="http://localhost:3000/user/admin-add-members">Block Employee</a></h4>
+				<h4><button><%= link_to 'Set Employees Password', set_password_path %></button></h4>
 				<% if @array %>
 					<% @array.each do |x| %>
 						<% if x=='respond_to_patient_requests' %>
-							<h4><a href="http://localhost:3000/user/respond-to-patient-requests">respond_to_patient_requests</a></h4>
+							<h4><button><%= link_to 'Pespond to Patient Requests', respond_to_patient_requests_path %></button></h4>
 						<% elsif x=='manage_medical_profile' %>
-							<h4><a href="http://localhost:3000/user/manage-medical-profile">Manage Medical Profile</a></h4>
+							<h4><button><%= link_to 'Manage Medical Profile', manage_medical_profile_path %></button></h4>
 						<% elsif x=='edit_hospital_profile' %>
-							<h4><a href="http://localhost:3000/user/edit-hospital-profile">Edit-Hospital-Profile</a></h4>
+							<h4><button><%= link_to 'Edit-Hospital-Profile', edit_hospital_profile_path %></button></a></h4>
 						<% end %>
 					<% end %>
 				<% end %>
@@ -35,6 +33,11 @@
 					<div class="col-md-12">
 						<form charset='UTF-8' method="post" action="/user/create">
 							<input type="hidden" name="authenticity_token" value="j/DcoJ2VZvr7vdf8CHKsvjdlDbmiizaOb5B8DMALg6s=" >
+							<% if @auth_token %>
+								<input type="hidden" name="auth_token" value="<%= @auth_token %>" >
+							<% else %>
+								<input type="hidden" name="auth_token" value="" >
+							<% end %>
 							Name:<input type="text" name="name" class="form-control" required><br>
 							Email:<input type="email" name="email" class="form-control" required><br>
 							<input type="checkbox" name="fdata[respond_to_patient_requests]" id="respond_to_patient_requests" value="0">respond to patient requests
@@ -45,18 +48,16 @@
 						</form>
 					</div>
 					<% if @permissions %>
-					 		<p style="color: red"><%= @permissions %></p>
+					 	<p style="color: grey"><%= @permissions %></p>
 					<% elsif @emp %>
-							<% if@emp.errors.any? %>
-								<h2>Errors:</h2>
-								<ul>
-									<% @emp.errors.full_messages.each do |x| %>
-										<p style="color: red"><%= x %></p>
-									<% end %>
-								</ul>
-							<% end %>
-					 <% else %>
-					 		<p style="color: green">Invitation has been sent to user</p>
+						<% if@emp.errors.any? %>
+							<h2>Errors:</h2>
+							<ul>
+								<% @emp.errors.full_messages.each do |x| %>
+									<p style="color: red"><%= x %></p>
+								<% end %>
+							</ul>
+						<% end %>
 					<% end %>
 					</div>
 				</div>
@@ -64,6 +65,7 @@
 		</div>
 	</div>
 </div>
+
 <script type="text/javascript">
 function checkBox() {
 	$("input:checkbox").on("click", function(){
@@ -76,6 +78,7 @@ function checkBox() {
 	});
 }
 </script>
+
 <script type="text/javascript">checkBox()</script>
 </body>
 </html>

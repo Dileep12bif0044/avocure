@@ -2,11 +2,11 @@
 <% if @array %>
 	<% @array.each do |x| %>
 		<% if x=='respond_to_patient_requests' %>
-			<h4><a href="http://localhost:3000/user/respond-to-patient-requests">Respond to patient requests</a></h4>
+			<h4><button><%= link_to 'Pespond to Patient Requests', respond_to_patient_requests_path %></button></h4>
 		<% elsif x=='edit_hospital_profile' %>
-			<h4><a href="http://localhost:3000/user/edit-hospital-profile">Edit Hospital Profile</a></h4>
+			<h4><button><%= link_to 'Edit Hospital Profile', edit_hospital_profile_path %></button></h4>
 		<% elsif x=='add_new_members' %>
-			<h4><a href="http://localhost:3000/user/add-new-members">Add New Members</a></h4>
+			<h4><button><%= link_to 'Add New Members', add_new_members_path %></button></a></h4>
 		<% end %>
 	<% end %>
 <% end %>

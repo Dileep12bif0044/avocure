@@ -1,4 +1,5 @@
 class UserController < ApplicationController
+  @@max_time_stamp = (Time.now.to_i+24*60*60).to_i
   def registration
   end
 
@@ -11,23 +12,34 @@ class UserController < ApplicationController
   end
 
   def create
-    if params[:fdata]
-      registration_create_local()
-      if !@emp.errors.any?
-        params[:fdata].each do |data|
-          if data['add_new_members']
-            create_local(@emp.email, @emp.id, @emp.name, data['add_new_members'])
-          elsif data['edit_hospital_profile']
-            create_local(@emp.email, @emp.id, @emp.name, data['edit_hospital_profile'])
-          elsif data['manage_medical_profile']
-            create_local(@emp.email, @emp.id, @emp.name, data['manage_medical_profile'])
-          else data['respond_to_patient_requests']
-            create_local(@emp.email, @emp.id, @emp.name, data['respond_to_patient_requests'])
+    if params[:auth_token]
+      db_time_stamp = Employee.where(:auth_token=>params[:auth_token]).first
+      @auth_token = params[:auth_token]
+      if (db_time_stamp && db_time_stamp.time_stamp).to_i < @@max_time_stamp
+        if params[:fdata]
+          registration_create_local()
+          if !@emp.errors.any?
+            params[:fdata].each do |data|
+              if data['add_new_members']
+                create_local(@emp.email, @emp.id, @emp.name, data['add_new_members'])
+              elsif data['edit_hospital_profile']
+                create_local(@emp.email, @emp.id, @emp.name, data['edit_hospital_profile'])
+              elsif data['manage_medical_profile']
+                create_local(@emp.email, @emp.id, @emp.name, data['manage_medical_profile'])
+              else data['respond_to_patient_requests']
+                create_local(@emp.email, @emp.id, @emp.name, data['respond_to_patient_requests'])
+              end
+            end
+            @permissions = 'Invitation has been sent to user'
           end
+        else
+          @permissions = 'Select a check box for permission'
         end
+      else
+        @permissions = 'Your session has been expired, Please login again !'
       end
-    else
-      @permissions = 'Select a check box for permission'
+    elsif !params[:auth_token]
+      @permissions = 'You are not loggedin, Please login'
     end
     render 'add_new_members'
   end
@@ -75,21 +87,32 @@ class UserController < ApplicationController
     if !@db_user
       @db_user = "Email or password is not correct, Please try again"
       render "login"
-    else 
+    else
+      pass_length = 10;
+      chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
+      auth_token = ''
+      pass_length.times { auth_token << chars[rand(chars.size)] }
+      @db_user.auth_token = auth_token
+      @db_user.time_stamp = Time.now.to_i
+      @db_user.save 
+      @auth_token = auth_token 
+
       @db_emp_type1 = EmployeeEmployeeType.joins(:employee).where(:employees=>{:email=>@user.email, :password=>@user.password}).select('employee_employee_types.employee_type_id')
       @db_emp_type = EmployeeType.where(:id=>@db_emp_type1).select('employee_types.work_type')
       @array = Array.new
       @db_emp_type.each do |x|
         @array.push x.work_type
       end
-      if @array.include? 'add_new_members'
-        render 'add_new_members'
-      elsif @array.include? 'respond_to_patient'
-        render 'respond_to_patient'
-      elsif @array.include? 'manage_medical_profile'
-        render 'manage_medical_profile'
-      elsif @array.include? 'edit_hospital_profile'
-        render 'edit_hospital_profile'
+      if auth_token
+        if @array.include? 'add_new_members'
+          render 'add_new_members'
+        elsif @array.include? 'respond_to_patient'
+          render 'respond_to_patient'
+        elsif @array.include? 'manage_medical_profile'
+          render 'manage_medical_profile'
+        elsif @array.include? 'edit_hospital_profile'
+          render 'edit_hospital_profile'
+        end
       end
     end
   end
